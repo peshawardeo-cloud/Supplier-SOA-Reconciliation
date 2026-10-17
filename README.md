@@ -1,6 +1,10 @@
 # Supplier SOA Reconciliation System
 
-Phase 1 (foundation): login, user roles, settings, audit log, and the secure database base.
+Built so far:
+
+- **Phase 1** - login, user roles, settings, audit log, secure database base
+- **Phase 2** - suppliers (add, edit, search), supplier workspaces, reconciliation periods with statuses
+- **Phase 3** - supplier statement (SOA) import from **PDF, Excel (.xlsx) or CSV**, with preview, column mapping, validation, duplicate detection, statement-total checks and import history
 
 ## What you need (one-time)
 
@@ -59,5 +63,38 @@ supabase/migrations/   database setup (run in order)
 src/app/(auth)/        login
 src/app/(app)/         dashboard, settings, users
 src/lib/               supabase clients, auth/role checks, money helpers
+src/lib/import/        PDF / Excel / CSV readers, validation, duplicate staging
+src/lib/reconcile/     document-number normalisation (matching engine comes in Phase 5)
 tests/                 automated tests
+```
+
+
+## Updating an existing deployment to Phase 2 + 3
+
+1. **Database:** in Supabase open **SQL Editor -> New query**, paste all of `supabase/migrations/0002_suppliers_periods_soa_import.sql` and click **Run**. (Run it once only. `0001` was already run.)
+2. **Check storage:** Supabase -> **Storage** should now show a **private** bucket named `imports`. Uploaded statements are kept there as evidence.
+3. **Code:** replace the files in your GitHub repository with this version (keep `.env.local` out of Git). Vercel redeploys automatically; no new environment variables are needed.
+4. Open the app -> **Suppliers -> Add supplier**.
+
+## Importing a supplier statement
+
+1. **Suppliers -> your supplier -> New reconciliation period** (e.g. the dates the statement covers, or the month you are reconciling).
+2. Open the period -> **Import supplier statement (SOA)** -> choose the file.
+3. **PDF:** read automatically. **Excel/CSV:** you match the columns once; it is remembered for that supplier.
+4. **Review:** check *Statement totals check* (the figures printed on the statement against what was read). Fix or skip errors, decide on duplicates, then **Import**.
+5. Imported entries cannot be edited. A wrong import can be reverted by an administrator (with a reason); history is kept.
+
+## Things to know
+
+- Text-based PDFs only. A scanned or photographed PDF has no text to read; ask the supplier for the original PDF or Excel file.
+- Old `.xls` files are not supported; open in Excel and **Save As .xlsx** (or CSV).
+- The PDF reader currently understands the layout used by Saudi Vetonit (SAVETO) statements. Another supplier's PDF layout may need its own reader; Excel/CSV works for any layout through column mapping.
+- Periods must be **Draft** or **In progress** to accept imports. Only an administrator can lock a period.
+
+## Automated checks
+
+```bash
+npm run typecheck   # types
+npm test            # parsing, matching rules, money maths, import pipeline (includes an in-memory PostgreSQL)
+npm run test:db     # database security rules: roles, locked periods, duplicate files, revert, audit
 ```

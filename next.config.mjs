@@ -10,6 +10,8 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Loaded from node_modules at runtime instead of being bundled (large library, reads Excel files).
+  serverExternalPackages: ["exceljs"],
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

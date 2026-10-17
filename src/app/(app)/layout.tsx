@@ -23,7 +23,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     );
   }
 
-  const items: NavItem[] = [{ href: "/dashboard", label: "Dashboard" }];
+  const items: NavItem[] = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/suppliers", label: "Suppliers" },
+  ];
   if (profile.role === "admin") {
     items.push({ href: "/settings", label: "Settings" }, { href: "/users", label: "Users" });
   }

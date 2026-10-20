@@ -21,7 +21,8 @@ await db.exec(`
 `);
 await db.exec(readFileSync(P + "0001_foundation.sql", "utf8"));
 await db.exec(readFileSync(P + "0002_suppliers_periods_soa_import.sql", "utf8"));
-ok("migrations 0001+0002 apply cleanly", true);
+await db.exec(readFileSync(P + "0003_documents_matching_discrepancies.sql", "utf8"));
+ok("migrations 0001+0002+0003 apply cleanly", true);
 
 const admin = (await db.query(`insert into auth.users(email) values ('admin@x.test') returning id`)).rows[0].id;
 const acct  = (await db.query(`insert into auth.users(email) values ('acct@x.test') returning id`)).rows[0].id;

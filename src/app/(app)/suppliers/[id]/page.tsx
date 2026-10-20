@@ -114,6 +114,19 @@ export default async function SupplierWorkspacePage({
         </section>
       </div>
 
+      <section className="card">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Documents</h2>
+        <div className="flex flex-wrap gap-2 text-sm">
+          <Link className="btn-secondary" href={`/suppliers/${id}/documents/invoice`}>Invoices</Link>
+          <Link className="btn-secondary" href={`/suppliers/${id}/documents/po`}>Purchase orders</Link>
+          <Link className="btn-secondary" href={`/suppliers/${id}/documents/dn`}>Delivery notes</Link>
+          <Link className="btn-secondary" href={`/suppliers/${id}/documents/payment`}>Payments</Link>
+          <Link className="btn-secondary" href={`/suppliers/${id}/allocations`}>Apply payments</Link>
+          <Link className="btn-secondary" href={`/discrepancies?supplier=${id}`}>Discrepancies</Link>
+          <Link className="btn-secondary" href={`/refunds?supplier=${id}`}>Refund claims</Link>
+        </div>
+      </section>
+
       <section className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-lg font-semibold">Reconciliation periods</h2>

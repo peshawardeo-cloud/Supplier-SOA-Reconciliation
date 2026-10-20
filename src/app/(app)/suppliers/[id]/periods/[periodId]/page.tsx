@@ -184,6 +184,14 @@ export default async function PeriodPage({
         )}
       </section>
 
+      <section className="card flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="font-semibold">Reconcile with our records</h2>
+          <p className="text-sm text-slate-600">Compare this statement with your invoices, payments, purchase orders and delivery notes.</p>
+        </div>
+        <Link href={`${base}/reconcile`} className="btn">Open reconciliation</Link>
+      </section>
+
       {/* ---------- Imports ---------- */}
       <section className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">

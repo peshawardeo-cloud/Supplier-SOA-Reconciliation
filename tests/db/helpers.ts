@@ -21,6 +21,7 @@ export async function makeDb() {
   `);
   await db.exec(readFileSync(dir + "0001_foundation.sql", "utf8"));
   await db.exec(readFileSync(dir + "0002_suppliers_periods_soa_import.sql", "utf8"));
+  await db.exec(readFileSync(dir + "0003_documents_matching_discrepancies.sql", "utf8"));
   return db;
 }
 

@@ -64,10 +64,19 @@ src/app/(auth)/        login
 src/app/(app)/         dashboard, settings, users
 src/lib/               supabase clients, auth/role checks, money helpers
 src/lib/import/        PDF / Excel / CSV readers, validation, duplicate staging
-src/lib/reconcile/     document-number normalisation (matching engine comes in Phase 5)
+src/lib/reconcile/     document-number normalisation, matching engine, data loader
+src/lib/reports.ts     dashboard figures and filtered results
+src/lib/excel.ts       Excel export helpers (number formats, formula-injection protection)
+docs/                  user guide, backup and restore, security notes
 tests/                 automated tests
 ```
 
+
+## Updating an existing deployment to the full version (Phase 4 onward)
+
+1. **Database:** in Supabase **SQL Editor -> New query**, paste all of `supabase/migrations/0003_documents_matching_discrepancies.sql` and click **Run** once. (`0001` and `0002` must already have been run.)
+2. **Code:** replace the repository files with this version; Vercel redeploys. No new environment variables.
+3. Read `docs/USER_GUIDE.md` for the daily workflow, and `docs/BACKUP_AND_RESTORE.md` before using real data.
 
 ## Updating an existing deployment to Phase 2 + 3
 
@@ -96,5 +105,11 @@ tests/                 automated tests
 ```bash
 npm run typecheck   # types
 npm test            # parsing, matching rules, money maths, import pipeline (includes an in-memory PostgreSQL)
-npm run test:db     # database security rules: roles, locked periods, duplicate files, revert, audit
+npm run test:db     # 30+ direct checks of the database rules (roles, locking, immutability)
+```
+
+To also test against the real supplier files, point the tests at them:
+
+```bash
+REAL_SOA_PDF=/path/to/statement.pdf REAL_INVOICE_PDF=/path/to/invoice.pdf npm test
 ```
